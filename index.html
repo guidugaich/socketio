@@ -5,15 +5,30 @@
   </head>
   <body>
     <button id='ping'>PING</button>
+    <ul id='messages'></ul>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
+
         const button = document.querySelector('#ping');
-        console.log(button);
+
         button.addEventListener('click', (e) => {
-            console.log('cricou no butao');
             socket.emit('ping');
             return false;
+        });
+
+        const createMessage = (msg) => {
+            const msgUl = document.querySelector('#messages');
+            const li = document.createElement('li');
+            li.innerText = msg;
+            msgUl.appendChild(li);
+        }
+
+        socket.on('ola', (msg) => createMessage(msg))
+
+        socket.on('pong', (msg) => {
+            console.log('chegou o pong');
+            createMessage(msg)
         });
     </script>
   </body>
